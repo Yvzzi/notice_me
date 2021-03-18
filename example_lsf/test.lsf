@@ -1,0 +1,7 @@
+#!/bin/bash
+#BSUB -J TEST
+#BSUB -q short
+#BSUB -o stdout_%J.out
+#BSUB -e stderr_%J.out
+
+./sleep.sh
