@@ -2,6 +2,7 @@
 import json
 import os
 import requests
+import sys
 
 SENDKEY = ""
 USER = ""
@@ -54,8 +55,13 @@ json.dump([job_id_dict, job_ids], fp)
 finished_job_ids = list(set(old_job_ids) - (set(old_job_ids) & set(job_ids)))
 if len(finished_job_ids) != 0:
     buf = []
-    for _id in finished_job_ids:
-        buf.append(str(_id) + "(" + (old_job_id_dict[str(_id)].encode("utf-8")) + ")")
+    if sys.version_info.major == 2:
+        for _id in finished_job_ids:
+            buf.append(str(_id) + "(" + (old_job_id_dict[str(_id)].encode("utf-8")) + ")")
+    else:
+        for _id in finished_job_ids:
+            buf.append(str(_id) + "(" + old_job_id_dict[str(_id)] + ")")
+
     res = requests.post("https://sctapi.ftqq.com/" + SENDKEY + ".send", {
         "text": "超算计算通知",
         "desp": "任务" + (", ".join(buf)) + "完成了, 快去看看叭"

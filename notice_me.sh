@@ -6,7 +6,8 @@ if [[ $# -eq 0 ]]; then
 fi
 curr_path=$(dirname $(readlink -f "$0"))
 cd $curr_path
-tabjob="* * * * * python "$curr_path"/notice_me.py"
+python_path=$(which python)
+tabjob="* * * * * "$python_path" "$curr_path"/notice_me.py"
 if [[ "$1" == "on" ]]; then
     (crontab -l | grep -v "$tabjob"; echo "$tabjob") | crontab - > /dev/null 2>&1
     sed -i -e 's#^\s*USER\s*=\s*.*#USER = "'$(whoami)'"#' \
@@ -31,4 +32,4 @@ elif [[ "$1" == "set-sendkey" ]]; then
 else
     echo $USAGE
 fi
-unset tabjob curr_path ans send_key USAGE
+unset tabjob curr_path ans send_key USAGE python_path
